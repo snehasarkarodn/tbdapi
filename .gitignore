@@ -1,0 +1,11 @@
+.vscode/
+Thumbs.db
+/staticfiles/ 
+/media/ 
+/__pycache__/ 
+*.pyc 
+*.pyo 
+*.pyd
+*.sqlite3 
+local_settings.py 
+db.sqlite3 
