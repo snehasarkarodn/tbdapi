@@ -1,16 +1,12 @@
 from openai import OpenAI
 import pandas as pd
-import os
-import json
 import requests
 import base64
-from typing import Literal, Any
-from pydantic import BaseModel, Field, field_validator, FieldValidationInfo
+# from pydantic import BaseModel, Field, field_validator, FieldValidationInfo
 from langchain.prompts import PromptTemplate
 from langchain.output_parsers import PydanticOutputParser
 from dotenv import load_dotenv
 import logging
-import numpy as np
 
 load_dotenv()
 client = OpenAI()
@@ -84,29 +80,6 @@ def attribute_prompt_parser(prompt, clothing_attributes_class):
     except Exception as e:
         print(f'Error in attribute_prompt_parser: {e}')
         return None, None
-    
-def image_url_prompt(image_url):    
-    image_url_prompt = {"type": "image_url",
-                         "image_url": {
-                             "url": f"{image_url}","detail": "low"},
-                        }
-    return(image_url_prompt)
-
-# def user_prompt_for_attribute_generation(Sub_category):
-#     prompts = {
-#         'Dress' : "You will be given an image of a person wearing an outfit. You have to analyze it and provide attributes for the outfit. Stick to the following schema and provide responses from the options provided for each attribute. For the dress_back_style, check the back style for back pose images only; if the image shows the front pose, leave it empty. Check Closure very carefully. If slit type and dress lining are not found, select 'No Slit' and 'No Lining'. Focus on weave_type more. Focus on all attributes carefully. {format_instructions}"
-#     }
-#     return prompts[Sub_category]
-
-def convert_to_dictionary_from_string(full_string):
-
-    start_index = full_string.find('{')
-    end_index = full_string.find('}') + 1
-    json_string = full_string[start_index:end_index]
-
-    # Convert JSON string to dictionary
-    product_info = json.loads(json_string)
-    return (product_info)
 
 def url_to_base64(path_or_url_list: list):
     # url_list = []
@@ -129,9 +102,6 @@ def url_to_base64(path_or_url_list: list):
     return image_list
 
 def attribute_generation_prompt(user_prompt,base_64_image_list):
-    # print("user_prompt",user_prompt)
-    # print("image_url",image_url)
-
     message=[
               {"role": "system", "content": "You are a helpful assistant that helps users in describing what's inside the images to the best of your abilities."},
               {"role": "user", "content": [
